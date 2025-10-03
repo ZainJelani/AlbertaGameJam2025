@@ -8,20 +8,42 @@ public class BulletScript : MonoBehaviour
     public float bulletLife = 1f;  // Defines how long before the bullet is destroyed
     public float rotation = 0f;
     public float speed = 1f;
-    public LogicScript logic;
+    public bool collectable = false;
 
+    public LogicScript logic;
+    private SpriteRenderer spriteRenderer;
+    public Sprite[] frames;
+    private BoxCollider2D boxCollider;
 
     private Vector2 spawnPoint;
     private float timer = 0f;
 
+    int letterIndex = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         spawnPoint = new Vector2(transform.position.x, transform.position.y);
-    }
 
+        // Get the SpriteRenderer component on the same GameObject
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        
+        // Pick a random frame at start
+        if (collectable)
+        {
+            letterIndex = logic.returnIndex();
+            spriteRenderer.sprite = frames[letterIndex];
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, 25);
+            spriteRenderer.sprite = frames[randomIndex];
+        }
+
+        UpdateColliderSize();
+    }
 
     // Update is called once per frame
     void Update()
@@ -44,8 +66,29 @@ public class BulletScript : MonoBehaviour
     {
         if (collision.gameObject.layer == 3)
         {
-            logic.adjustHealth(-1);
-            Debug.Log(message: "Collision");
+            if (collectable)
+            {
+                logic.adjustCollectedLetters(letterIndex);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                logic.adjustHealth(-1);
+                Debug.Log(message: "Collision");
+                Destroy(this.gameObject);
+            }
         }
     }
+
+    public void UpdateColliderSize()
+    {
+        if (spriteRenderer.sprite != null)
+        {
+            // Set the collider size to match the sprite's bounds
+            boxCollider.size = spriteRenderer.sprite.bounds.size;
+            // Optionally, adjust the offset if needed
+            boxCollider.offset = spriteRenderer.sprite.bounds.center;
+        }
+    }
+
 }

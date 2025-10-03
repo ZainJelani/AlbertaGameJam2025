@@ -10,6 +10,7 @@ public class BulletSpawner : MonoBehaviour
 {
     enum SpawnerType { Straight, Spin }
 
+    const int collectableOdds = 10;
 
     [Header("Bullet Attributes")]
     public GameObject bullet;
@@ -52,6 +53,12 @@ public class BulletSpawner : MonoBehaviour
             spawnedBullet.GetComponent<BulletScript>().speed = speed;
             spawnedBullet.GetComponent<BulletScript>().bulletLife = bulletLife;
             spawnedBullet.transform.rotation = transform.rotation;
+
+            int randomNum = Random.Range(0, 100);
+            if (randomNum <= collectableOdds)
+            {
+                spawnedBullet.GetComponent<BulletScript>().collectable = true;
+            }
         }
     }
 }
