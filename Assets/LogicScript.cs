@@ -11,7 +11,7 @@ public class LogicScript : MonoBehaviour
 
     // word is ZAP
     private int[] word = { 51, 26, 41 };
-    private string builtWord = string.Empty;
+    private string builtWord = "Word:";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,7 +28,12 @@ public class LogicScript : MonoBehaviour
     public void adjustHealth(int amount)
     {
         health = health + amount;
-        healthText.text = health.ToString();
+        string hearts = "Health: ";
+        for (int i = 0; i < health; i++)
+        {
+            hearts += "<3 ";
+        }
+        healthText.text = hearts;
         if(health <= 0)
         {
             restartGame();
@@ -46,22 +51,22 @@ public class LogicScript : MonoBehaviour
 
         if (collectedLetters == 1)
         {
-            builtWord = "Z";
+            builtWord = "Word: Z";
         }
         else if (collectedLetters == 2)
         {
-            builtWord = "ZA";
+            builtWord = "Word: ZA";
         }
         else if (collectedLetters == 3)
         {
-            builtWord = "ZAP";
+            builtWord = "Word: ZAP";
         }
 
         if (collectedLetters >= 3)
         {
             collectedLetters = 0;
             Debug.Log(message: "Game time!");
-            builtWord = string.Empty;
+            builtWord = "Word:";
         }
 
         wordText.text = builtWord;
