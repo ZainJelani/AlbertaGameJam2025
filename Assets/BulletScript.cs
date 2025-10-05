@@ -31,14 +31,16 @@ public class BulletScript : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         
         // Pick a random frame at start
+        letterIndex = logic.returnIndex();
         if (collectable)
         {
-            letterIndex = logic.returnIndex();
             spriteRenderer.sprite = frames[letterIndex];
         }
         else
         {
+            // Pick from [0, 25), 25 options excluding letterIndex
             int randomIndex = Random.Range(0, 25);
+            if (randomIndex >= letterIndex) randomIndex++;
             spriteRenderer.sprite = frames[randomIndex];
         }
 

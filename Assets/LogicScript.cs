@@ -9,8 +9,10 @@ public class LogicScript : MonoBehaviour
     public int collectedLetters = 0;
     public TMP_Text wordText;
 
-    // word is ZAP
-    private int[] word = { 51, 26, 41 };
+    // Array of onomatopoeias to cycle through
+    private string[] words = {"FLAP", "ZAP", "BOOM"};
+    private int targetWordIndex = 0;
+    private string word { get { return words[targetWordIndex]; } }
     private string builtWord = "Word:";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,31 +44,27 @@ public class LogicScript : MonoBehaviour
 
     public void adjustCollectedLetters(int letter)
     {
-        if(letter == word[collectedLetters])
+        if(letter == GetSpriteIndexFromString(collectedLetters))
         {
             collectedLetters++;
             Debug.Log(message: "Spelt Word");
         }
 
-
-        if (collectedLetters == 1)
+        // Build the word dynamically based on collected letters
+        builtWord = "Word: ";
+        for (int i = 0; i < collectedLetters; i++)
         {
-            builtWord = "Word: Z";
-        }
-        else if (collectedLetters == 2)
-        {
-            builtWord = "Word: ZA";
-        }
-        else if (collectedLetters == 3)
-        {
-            builtWord = "Word: ZAP";
+            builtWord += word[i];
         }
 
-        if (collectedLetters >= 3)
+        if (collectedLetters >= word.Length)
         {
             collectedLetters = 0;
             Debug.Log(message: "Game time!");
             builtWord = "Word:";
+            
+            // Cycle to the next word
+            targetWordIndex = (targetWordIndex + 1) % words.Length;
         }
 
         wordText.text = builtWord;
@@ -79,7 +77,18 @@ public class LogicScript : MonoBehaviour
 
     public int returnIndex()
     {
-        int letterIndex = word[collectedLetters];
+        int letterIndex = GetSpriteIndexFromString(collectedLetters);
         return letterIndex;
+    }
+
+    private int GetSpriteIndexFromString(int position)
+    {
+        // Default to 'A' if position is out of bounds
+        if (position < 0 || position >= word.Length) return 26;
+
+        // Convert letter to sprite index starting at A=26
+        char letter = char.ToUpper(word[position]);
+        if (letter >= 'A' && letter <= 'Z') return 26 + (letter - 'A');
+        return 26;
     }
 }
