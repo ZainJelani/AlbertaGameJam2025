@@ -10,6 +10,13 @@ public class PlayerScript : MonoBehaviour
     public InputActionReference move;
     public InputActionReference phase;
 
+    //private PlayerInput playerInput;
+
+    //public void Awake()
+    //{
+    //    playerInput = GetComponent<PlayerInput>();
+    //}
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,4 +48,9 @@ public class PlayerScript : MonoBehaviour
     {
         Debug.Log(message: "Phase");
     }
+
+    //private void SwitchActionMap(InputAction.CallbackContext obj)
+    //{
+    //    playerInput.SwitchCurrentActionMap("Game Over Screen");
+    //}
 }

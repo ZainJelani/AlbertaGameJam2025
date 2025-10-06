@@ -15,6 +15,9 @@ public class LogicScript : MonoBehaviour
     private string word { get { return words[targetWordIndex]; } }
     private string builtWord = "Word:";
 
+    public GameObject gameOverScreen;
+    const int startingScene = 1;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,7 +41,7 @@ public class LogicScript : MonoBehaviour
         healthText.text = hearts;
         if(health <= 0)
         {
-            restartGame();
+            gameOver();
         }
     }
 
@@ -70,9 +73,14 @@ public class LogicScript : MonoBehaviour
         wordText.text = builtWord;
     }
 
+    public void gameOver()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
     public void restartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(startingScene);
     }
 
     public int returnIndex()

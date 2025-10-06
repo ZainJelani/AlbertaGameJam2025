@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class BulletScript : MonoBehaviour
     private float timer = 0f;
 
     int letterIndex = 0;
+    private float deadzoneX = 9;
+    private float deadzoneY = 6;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +42,7 @@ public class BulletScript : MonoBehaviour
         else
         {
             // Pick from [0, 25), 25 options excluding letterIndex
-            int randomIndex = Random.Range(0, 25);
+            int randomIndex = UnityEngine.Random.Range(0, 25);
             if (randomIndex >= letterIndex) randomIndex++;
             spriteRenderer.sprite = frames[randomIndex];
         }
@@ -53,6 +56,10 @@ public class BulletScript : MonoBehaviour
         if (timer > bulletLife) Destroy(this.gameObject);
         timer += Time.deltaTime;
         transform.position = Movement(timer);
+        if (Math.Abs(transform.position.x) >= deadzoneX || Math.Abs(transform.position.y) >= deadzoneY)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
